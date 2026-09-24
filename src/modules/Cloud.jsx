@@ -20,7 +20,7 @@ export default function MediaCloud() {
     actions.addSlides([
       { id: `c${++seq.current}`, name: a.name, size: a.size, dur: a.kind === 'video' ? 9 : 6, grad: a.grad, kind: a.kind === 'video' ? 'video' : 'image', tag: 'Cloud' },
     ])
-    toast(`Sent ${a.name} to Slideshow Studio`, 'good')
+    toast(`Added ${a.name} to your slideshow`, 'good')
   }
 
   return (
@@ -28,7 +28,7 @@ export default function MediaCloud() {
       <div className="grid grid-cols-12 gap-5">
         <div className="col-span-12 lg:col-span-4">
           <Panel className="h-full">
-            <SectionTitle icon={HardDrive} title="Cloud Storage" desc="Guest Standee + Owner Suite share this vault" />
+            <SectionTitle icon={HardDrive} title="Cloud Storage" desc="Your store screen and owner console share this space" />
             <div className="mt-4">
               <div className="flex items-end justify-between">
                 <p className="text-[26px] font-bold leading-none text-snow">
@@ -46,7 +46,7 @@ export default function MediaCloud() {
             <Dropzone
               compact
               label="Upload new media"
-              sub="Auto-optimised for 9:16 playback"
+              sub="Automatically made ready for the tall screen"
               formats={['MP4', 'WebM', 'JPG', 'PNG']}
               onFile={(f) => {
                 const nid = `m${++seq.current}`
@@ -56,7 +56,7 @@ export default function MediaCloud() {
             />
             <div className="mt-4 flex items-center gap-2 rounded-xl border border-line bg-ink/50 px-3 py-2 text-[10px] text-mist">
               <RadioTower className="h-3.5 w-3.5 text-good" />
-              Cloud-to-kiosk sync active · standby latency 8s
+              Connected to your store screen · syncs every 8 seconds
             </div>
           </Panel>
         </div>
@@ -65,8 +65,8 @@ export default function MediaCloud() {
           <Panel>
             <SectionTitle
               icon={CloudIcon}
-              title="Asset Library"
-              desc="Every image and video queued for the display grid"
+              title="Your Media"
+              desc="Photos and videos ready to use on any screen"
               right={
                 <div className="w-64">
                   <TextField size="sm" value={app.cloudQuery} onChange={(v) => actions.set({ cloudQuery: v })} placeholder="Search assets..." icon={Search} />
@@ -100,7 +100,7 @@ export default function MediaCloud() {
                     </div>
                   </div>
                   <div className="flex flex-col gap-1" onPointerDown={(e) => e.stopPropagation()}>
-                    <IconButton size="sm" icon={Send} label="Send to slideshow" tone="soft" onClick={() => sendToSlideshow(a)} />
+                    <IconButton size="sm" icon={Send} label="Add to slideshow" tone="soft" onClick={() => sendToSlideshow(a)} />
                     <IconButton size="sm" icon={Download} label="Download" onClick={() => toast(`Downloading ${a.name}`, 'brand')} />
                   </div>
                 </div>

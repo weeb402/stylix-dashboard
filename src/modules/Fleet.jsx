@@ -41,7 +41,7 @@ export default function Fleet() {
         n.delete(k.id)
         return n
       })
-      toast(`${k.store} · ${k.id} rebooted · heartbeat restored`, 'good')
+      toast(`${k.store} rebooted & back online`, 'good')
     }, 2200)
   }
 
@@ -50,20 +50,20 @@ export default function Fleet() {
     if (!n) return toast('Select at least one kiosk to restart', 'warn')
     sel.forEach((id) => restart(FLEET.find((k) => k.id === id)))
     setSel(new Set())
-    toast(`Restart dispatched to ${n} kiosks`, 'brand')
+    toast(`Restart sent to ${n} kiosks`, 'brand')
   }
 
   return (
     <Section>
       <Panel glow className="overflow-hidden">
         <div className="pointer-events-none absolute -right-16 -top-20 h-56 w-56 rounded-full bg-brand/15 blur-3xl" />
-        <SectionTitle icon={RadioTower} title="Fleet Heartbeat Monitor" desc="Live telemetry for every connected STYLIX kiosk" right={<Chip tone={online.length === FLEET.length ? 'good' : 'brand'}>{online.length}/{FLEET.length} online</Chip>} />
+        <SectionTitle icon={RadioTower} title="Every Screen at a Glance" desc="Check how each store screen is doing, live" right={<Chip tone={online.length === FLEET.length ? 'good' : 'brand'}>{online.length}/{FLEET.length} online</Chip>} />
 
         <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <Kpi icon={RadioTower} label="Online kiosks" value={online.length} sub={`${FLEET.length - online.length} offline`} tone="good" />
-          <Kpi icon={Gauge} label="Avg. heartbeat" value={`${avgPing}ms`} sub="fleet-wide ping" tone="brand" />
-          <Kpi icon={HardDrive} label="Credits in fleet" value={totalCredits} sub="distributed balance" tone="good" />
-          <Kpi icon={Layers} label="OS coverage" value="9/12" sub="on v4.2.1" tone="warn" />
+          <Kpi icon={Gauge} label="Response speed" value={`${avgPing}ms`} sub="average across screens" tone="brand" />
+          <Kpi icon={HardDrive} label="Credits on screens" value={totalCredits} sub="total available" tone="good" />
+          <Kpi icon={Layers} label="Software up to date" value="9/12" sub="on v4.2.1" tone="warn" />
         </div>
 
         <Divider className="my-6" />
@@ -164,7 +164,7 @@ export default function Fleet() {
                   <Button variant="soft" size="sm" icon={MonitorUp} onClick={() => toast(`Opened console for ${k.store}`, 'brand')}>
                     Console
                   </Button>
-                  <Button variant="ghost" size="sm" icon={Zap} disabled={!k.online} onClick={() => toast(`Wake packet sent to ${k.id}`, 'good')}>
+                  <Button variant="ghost" size="sm" icon={Zap} disabled={!k.online} onClick={() => toast(`Woke up ${k.id}`, 'good')}>
                     Wake
                   </Button>
                 </div>

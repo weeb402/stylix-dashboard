@@ -27,11 +27,11 @@ export default function Firmware() {
 
   const schedule = () => {
     setRollouts((rs) => [
-      { id: `fw${Date.now()}`, name: `${ver} · rollout`, target: 4, done: 0, status: 'scheduled', window, note: phased ? 'Phased · 25% per night' : 'Blast · all at once' },
+      { id: `fw${Date.now()}`, name: `${ver} update`, target: 4, done: 0, status: 'scheduled', window, note: phased ? 'Install gradually · 25% per night' : 'All screens at once' },
       ...rs,
     ])
     setRunning(true)
-    toast(`Firmware rollout scheduled for ${window}`, 'brand')
+    toast(`Software update planned for ${window}`, 'brand')
   }
 
   const upgrades = rollouts.some((r) => r.status === 'running' && r.done < r.target)
@@ -40,12 +40,12 @@ export default function Firmware() {
     <Section>
       <Panel glow className="overflow-hidden">
         <div className="pointer-events-none absolute -right-16 -top-20 h-56 w-56 rounded-full bg-good/10 blur-3xl" />
-        <SectionTitle icon={Cpu} title="Firmware Rollout Scheduler" desc="Stage STYLIX OS updates across the fleet with zero daytime disruption" right={<Chip tone="good" icon={CheckCheck}>3 channels monitored</Chip>} />
+        <SectionTitle icon={Cpu} title="Software Updates" desc="Install new versions on your screens without bothering guests during the day" right={<Chip tone="good" icon={CheckCheck}>3 channels monitored</Chip>} />
 
         <div className="mt-6 grid gap-5 lg:grid-cols-2">
           {/* Release cards */}
           <div>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-mist">Available releases</p>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-mist">Available versions</p>
             <div className="mt-3 space-y-2.5">
               {FW_RELEASES.map((f) => (
                 <div key={f.name} className={cx('rounded-xl border p-3.5 transition-colors', ver === f.name ? 'border-brand/50 bg-brand/10' : 'border-line bg-ink/50')}>
@@ -65,8 +65,8 @@ export default function Firmware() {
                     <span>{f.size}</span>
                     <span>· published {f.published}</span>
                     <span className="ml-auto">
-                      <Button variant="ghost" size="sm" icon={Rocket} onClick={() => { setVer(f.name); toast(`Rolling out ${f.name}`, 'brand') }}>
-                        Roll out
+                      <Button variant="ghost" size="sm" icon={Rocket} onClick={() => { setVer(f.name); toast(`Picked ${f.name}`, 'brand') }}>
+                        Choose
                       </Button>
                     </span>
                   </div>
@@ -78,7 +78,7 @@ export default function Firmware() {
           {/* Scheduler */}
           <div>
             <div className="rounded-2xl border border-line bg-ink/50 p-5">
-              <p className="text-[12px] font-semibold uppercase tracking-wider text-mist">New rollout</p>
+              <p className="text-[12px] font-semibold uppercase tracking-wider text-mist">Plan an update</p>
 
               <p className="mt-4 text-[11px] text-mist">Version</p>
               <div className="mt-1.5 flex gap-2">
@@ -96,7 +96,7 @@ export default function Firmware() {
                 ))}
               </div>
 
-              <p className="mt-4 text-[11px] text-mist">Update window</p>
+              <p className="mt-4 text-[11px] text-mist">When to install</p>
               <div className="mt-1.5 flex flex-wrap gap-2">
                 {WINDOWS.map((w) => (
                   <button
@@ -115,7 +115,7 @@ export default function Firmware() {
               <div className="mt-4 flex items-center justify-between rounded-xl border border-line bg-input px-4 py-3">
                 <span className="flex items-center gap-2 text-[12px] text-snow">
                   <TimerReset className="h-4 w-4 text-brand" />
-                  Phased rollout
+                  Install gradually
                 </span>
                 <div
                   role="switch"
@@ -128,9 +128,9 @@ export default function Firmware() {
                   <motion.div layout transition={{ type: 'spring', stiffness: 500, damping: 32 }} className={cx('h-4.5 w-4.5 rounded-full bg-white', phased ? 'ml-auto mr-0.5' : 'ml-0.5')} />
                 </div>
               </div>
-              <p className="mt-2 text-[10px] text-mist/80">Phased pushes to 25% of the fleet per night — SAAS-style safe rollback, no daytime outage.</p>
+              <p className="mt-2 text-[10px] text-mist/80">Updates 25% of the fleet each night — we can pull back anytime, and guests are never disturbed.</p>
 
-              <Button block className="mt-4" icon={CalendarClock} onClick={schedule}>Schedule rollout</Button>
+              <Button block className="mt-4" icon={CalendarClock} onClick={schedule}>Plan the update</Button>
             </div>
           </div>
         </div>
@@ -138,7 +138,7 @@ export default function Firmware() {
         <Divider className="my-6" />
 
         {/* Rollout list */}
-        <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-mist">Scheduled rollouts</p>
+        <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-mist">Planned updates</p>
         <div className="mt-3 space-y-2.5">
           {rollouts.map((r) => (
             <motion.div key={r.id} layout className="flex flex-wrap items-center gap-4 rounded-xl border border-line bg-ink/50 p-4">
@@ -168,7 +168,7 @@ export default function Firmware() {
         {upgrades && (
           <div className="mt-4 flex items-center gap-2 rounded-xl border border-brand/30 bg-brand/8 px-4 py-2.5 text-[11px] text-mist">
             <Layers className="h-3.5 w-3.5 text-brand" />
-            Live rollout in progress — standby is blocked for offline kiosks until their window reopens.
+            Live update in progress — screens that are offline will update next time they're available.
           </div>
         )}
       </Panel>

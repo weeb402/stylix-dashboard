@@ -32,7 +32,7 @@ export default function Ticker() {
     setHistory((h) => [{ text: txt, at: `Broadcast #${h.length + 12} · just now` }, ...h])
     actions.patch('ticker', { text: txt })
     setPending('')
-    toast('Ticker broadcast pushed to Guest Standee', 'good')
+    toast('Your message is now on screen', 'good')
   }
 
   return (
@@ -44,7 +44,7 @@ export default function Ticker() {
             <SectionTitle
               icon={Captions}
               title="Live Ticker Simulator"
-              desc="WYSIWYG — the broadcast bar below renders your settings in real time"
+              desc="See exactly what will show on your screen"
               right={<Chip tone={t.enabled ? 'good' : 'bad'}>{t.enabled ? 'On air' : 'Paused'}</Chip>}
             />
             <div className="mt-4 flex flex-col items-center gap-5">
@@ -63,7 +63,7 @@ export default function Ticker() {
         {/* Presets & history */}
         <div className="col-span-12 space-y-5 lg:col-span-5">
           <Panel>
-            <SectionTitle icon={ClipboardPaste} title="Instant Copy Presets" desc="One-tap campaign messages" />
+            <SectionTitle icon={ClipboardPaste} title="Ready-Made Messages" desc="Tap one to add it to your ticker" />
             <div className="mt-3 flex flex-wrap gap-2">
               {TICKER_PRESETS.map((p) => (
                 <Chip
@@ -71,7 +71,7 @@ export default function Ticker() {
                   tone={t.text === p ? 'brand' : 'default'}
                   onClick={() => {
                     actions.patch('ticker', { text: p })
-                    toast('Preset loaded into ticker', 'brand')
+                    toast('Message added to your ticker', 'brand')
                   }}
                 >
                   {p}
@@ -79,21 +79,21 @@ export default function Ticker() {
               ))}
             </div>
             <div className="mt-4">
-              <p className="mb-1.5 text-[11px] font-medium uppercase tracking-wider text-mist">Custom message</p>
+              <p className="mb-1.5 text-[11px] font-medium uppercase tracking-wider text-mist">Your own message</p>
               <TextField
                 value={pending}
                 onChange={setPending}
-                placeholder="Type a custom broadcast…"
+                placeholder="Type your message here…"
                 icon={Megaphone}
               />
               <Button variant="primary" icon={Zap} block className="mt-3" onClick={broadcast}>
-                Broadcast now
+                Show on screen
               </Button>
             </div>
           </Panel>
 
           <Panel className="flex h-full flex-col">
-            <SectionTitle icon={History} title="Broadcast History" desc="Last pushes to the display grid" />
+            <SectionTitle icon={History} title="Broadcast History" desc="Messages you have sent before" />
             <div className="mt-3 space-y-2">
               <AnimatePresence initial={false}>
                 {history.map((h, i) => (
@@ -138,12 +138,12 @@ function Controls() {
             <p className="text-[13px] font-medium text-snow">Broadcast bar</p>
             <p className="text-[11px] text-mist">Show on all screens</p>
           </div>
-          <Switch on={t.enabled} onChange={(v) => set({ enabled: v }, `Ticker ${v ? 'enabled' : 'disabled'}`)} />
+          <Switch on={t.enabled} onChange={(v) => set({ enabled: v }, `Ticker ${v ? 'switched on' : 'switched off'}`)} />
         </div>
 
         <div>
           <div className="mb-2 flex items-center justify-between">
-            <p className="text-[12px] font-medium text-snow">Scroll speed</p>
+            <p className="text-[12px] font-medium text-snow">Speed</p>
             <span className="font-mono text-[11px] text-[#a9baff]">{t.speed.toFixed(1)}×</span>
           </div>
           <Slider
@@ -158,7 +158,7 @@ function Controls() {
 
         <div>
           <p className="mb-2 text-[12px] font-medium text-snow">Font size</p>
-          <Segmented options={FONT_SIZES} value={t.fontSize} onChange={(v) => set({ fontSize: v }, `Font size set to ${v.toUpperCase()}`)} />
+          <Segmented options={FONT_SIZES} value={t.fontSize} onChange={(v) => set({ fontSize: v }, `Text size changed to ${v.toUpperCase()}`)} />
         </div>
       </div>
 

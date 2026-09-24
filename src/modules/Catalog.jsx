@@ -40,11 +40,11 @@ export default function Catalog() {
     <Section>
       <div className="flex flex-wrap items-center justify-between gap-3">
         <Panel className="!p-3">
-          <Segmented options={TABS} value={cat} onChange={(v) => { actions.patch('catalog', { tab: v }); toast(`${TABS.find((t) => t.value === v).label} studio opened`, 'brand') }} />
+          <Segmented options={TABS} value={cat} onChange={(v) => { actions.patch('catalog', { tab: v }); toast(`${TABS.find((t) => t.value === v).label} opened`, 'brand') }} />
         </Panel>
         <div className="flex items-center gap-3">
           <Chip tone="good" icon={MonitorUp}>
-            {activeCount} active on standee
+            {activeCount} showing on your screen
           </Chip>
           <Button icon={Plus} onClick={() => setCreate(true)}>
             Create New AI Style
@@ -79,7 +79,7 @@ function StyleCard({ s, cat }) {
               {s.gender}
             </Chip>
             <Chip tone={s.active ? 'good' : 'default'} icon={MonitorUp}>
-              {s.active ? 'On standee' : 'Paused'}
+              {s.active ? 'On screen' : 'Paused'}
             </Chip>
           </div>
           <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/45 to-transparent p-3 pt-8">
@@ -93,14 +93,14 @@ function StyleCard({ s, cat }) {
       </div>
       <div className="flex items-center justify-between border-t border-line p-2.5">
         <div>
-          <p className="mb-1 text-[11px] text-mist">Active on Standee</p>
-          <Switch size="sm" on={s.active} onChange={(v) => { actions.toggleCatalog(cat, s.id); toast(`${s.name} ${v ? 'activated on standee' : 'paused on standee'}`, v ? 'good' : 'brand') }} />
+          <p className="mb-1 text-[11px] text-mist">Show on screen</p>
+          <Switch size="sm" on={s.active} onChange={(v) => { actions.toggleCatalog(cat, s.id); toast(`${s.name} ${v ? 'is now showing' : 'is paused'}`, v ? 'good' : 'brand') }} />
         </div>
         <div className="flex gap-1" onPointerDown={(e) => e.stopPropagation()}>
-          <Chip icon={Pencil} onClick={() => toast(`Editing ${s.name} — style studio`, 'brand')}>
+          <Chip icon={Pencil} onClick={() => toast(`Editing ${s.name}`, 'brand')}>
             Edit
           </Chip>
-          <Chip tone="bad" icon={Trash2} onClick={() => { actions.deleteStyle(cat, s.id); toast(`${s.name} removed from catalog`, 'bad') }}>
+          <Chip tone="bad" icon={Trash2} onClick={() => { actions.deleteStyle(cat, s.id); toast(`${s.name} was deleted`, 'bad') }}>
             Delete
           </Chip>
         </div>
@@ -127,14 +127,14 @@ function CreateDrawer({ open, onClose }) {
       const seq = ++genSeq.current
       actions.addStyle(cat, {
         id: `new${seq}`,
-        name: name || 'Untitled AI Style',
+        name: name || 'Untitled style',
         gender,
         prompt: prompt || 'Keep the silhouette clean and premium',
         active: true,
         grad: GRAD_CYCLE[seq % GRAD_CYCLE.length],
       })
       setBusy(false)
-      toast(`${name || 'Untitled AI Style'} generated & activated on standee`, 'good')
+      toast(`${name || 'Untitled style'} created and ready to show`, 'good')
       onClose()
       setName('')
       setPrompt('')
@@ -156,7 +156,7 @@ function CreateDrawer({ open, onClose }) {
             Cancel
           </Button>
           <Button variant="primary" icon={Wand2} className="flex-1" onClick={generate} disabled={busy}>
-            {busy ? 'Generating…' : `Generate · ${samples} samples`}
+            {busy ? 'Creating…' : `Create · ${samples} looks`}
           </Button>
         </div>
       }
@@ -183,7 +183,7 @@ function CreateDrawer({ open, onClose }) {
           <TextField multiline value={prompt} onChange={setPrompt} placeholder="Describe the fit, silhouette and finish…" icon={Wand2} />
         </div>
         <div>
-          <p className="mb-1.5 text-[11px] font-medium uppercase tracking-wider text-mist">Reference preview</p>
+          <p className="mb-1.5 text-[11px] font-medium uppercase tracking-wider text-mist">Reference photo</p>
           {refImg ? (
             <div className="relative flex items-center gap-3 rounded-xl border border-line bg-ink/50 p-2">
               <Art grad={refImg.grad} grain={false} className="h-14 w-11 shrink-0 overflow-hidden rounded-lg" />
@@ -196,21 +196,21 @@ function CreateDrawer({ open, onClose }) {
               </Chip>
             </div>
           ) : (
-            <Dropzone compact label="Upload a reference look" sub="Portrait photo preferred · defines the pose" formats={['JPG', 'PNG']} onFile={(f) => { setRefImg(f); toast('Reference loaded into generator', 'brand') }} />
+            <Dropzone compact label="Upload a reference photo" sub="Portrait photo works best · sets the pose" formats={['JPG', 'PNG']} onFile={(f) => { setRefImg(f); toast('Reference photo added', 'brand') }} />
           )}
         </div>
         <Divider />
         <div>
           <div className="mb-2 flex items-center justify-between">
-            <p className="text-[12px] font-medium text-snow">Sample variations</p>
+            <p className="text-[12px] font-medium text-snow">Number of samples</p>
             <span className="font-mono text-[11px] text-[#a9baff]">×{samples}</span>
           </div>
-          <Slider min={2} max={8} step={1} value={samples} onChange={setSamples} format={(v) => `${v} renders`} />
+          <Slider min={2} max={8} step={1} value={samples} onChange={setSamples} format={(v) => `${v} looks`} />
         </div>
         {busy && (
           <div className="flex items-center gap-2 rounded-xl border border-brand/40 bg-brand/10 px-4 py-3 text-[12px] text-[#a9baff]">
             <motion.span className="h-3 w-3 rounded-full border-2 border-brand/30 border-t-[#a9baff]" animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 0.9, ease: 'linear' }} />
-            Rendering {samples} samples on the standee engine…
+            Creating your samples now…
           </div>
         )}
       </div>

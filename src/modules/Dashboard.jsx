@@ -27,10 +27,10 @@ const MODES = [
 ]
 
 const KPI_SETA = [
-  { id: 'mode', label: 'Active Mode', value: 'Video Grid', sub: '2 Feeds', icon: LayoutGrid, seed: 11, delta: 'Broadcasting now', tone: 'good' },
+  { id: 'mode', label: 'Active Mode', value: 'Video Grid', sub: '2 Feeds', icon: LayoutGrid, seed: 11, delta: 'On screen now', tone: 'good' },
   { id: 'deck', label: 'Slide Deck', value: 14, sub: 'Assets', icon: Images, seed: 5, delta: 'All synced', tone: 'good' },
-  { id: 'ai', label: 'AI Generations · 24h', value: 17, sub: 'Photos rendered', icon: Sparkles, seed: 9, delta: '+4 today', tone: 'brand' },
-  { id: 'cred', label: 'Standee Balance', value: 49, sub: 'Of 120 credits', icon: Wallet, seed: 3, delta: '16 until rebalance', tone: 'warn' },
+  { id: 'ai', label: 'Photos Made · 24h', value: 17, sub: 'AI try-ons', icon: Sparkles, seed: 9, delta: '+4 today', tone: 'brand' },
+  { id: 'cred', label: 'Standee Credits', value: 49, sub: 'Of 120 total', icon: Wallet, seed: 3, delta: 'Refill when low', tone: 'warn' },
 ]
 
 export default function Dashboard() {
@@ -69,7 +69,7 @@ export default function Dashboard() {
                   value={app.orientation}
                   onChange={(v) => {
                     actions.setOrientation(v)
-                    toast(v === 'landscape' ? 'Landscape TV · 1920×1080' : 'Portrait standee · 1080×1920', 'brand')
+                    toast(v === 'landscape' ? 'Landscape TV · 1920×1080' : 'Portrait screen · 1080×1920', 'brand')
                   }}
                   options={[
                     { value: 'portrait', label: 'Portrait 1080×1920' },
@@ -118,7 +118,7 @@ export default function Dashboard() {
           <div className="grid grid-cols-12 gap-5">
             <div className="col-span-12 lg:col-span-7">
               <Panel>
-                <SectionTitle icon={Store} title="Business Identity" desc="Synced to every kiosk screen · watermark overlay" />
+                <SectionTitle icon={Store} title="Business Identity" desc="Shown on every store screen · small corner logo" />
                 <div className="mt-4 space-y-4">
                   <div>
                     <p className="mb-1.5 text-[11px] font-medium uppercase tracking-wider text-mist">Store Name</p>
@@ -130,18 +130,18 @@ export default function Dashboard() {
                         icon={Store}
                         className="flex-1"
                       />
-                      <Button variant="soft" icon={PencilLine} onClick={() => toast('Store name editable inline — press Enter to commit', 'brand')}>
+                      <Button variant="soft" icon={PencilLine} onClick={() => toast('Click the text and press Enter to save', 'brand')}>
                         Edit
                       </Button>
                     </div>
                   </div>
                   <DivLine />
                   <div>
-                    <p className="mb-1.5 text-[11px] font-medium uppercase tracking-wider text-mist">Branded Watermark Logo</p>
+                    <p className="mb-1.5 text-[11px] font-medium uppercase tracking-wider text-mist">Logo (Watermark)</p>
                     <Dropzone
                       compact
-                      label={biz.logo ? biz.logo.name : 'Drop watermark logo here'}
-                      sub="PNG with transparency · appears bottom-right on screen"
+                      label={biz.logo ? biz.logo.name : 'Drop your logo here'}
+                      sub="PNG with no background · shown small in the corner of every screen"
                       onFile={(f) => { actions.patch('business', { logo: f }); toast('Watermark logo applied to all screens', 'good') }}
                     />
                   </div>
@@ -153,7 +153,7 @@ export default function Dashboard() {
             <div className="col-span-12 lg:col-span-5">
               <Panel className="flex h-full flex-col">
                 <div className="mb-3 flex items-center justify-between">
-                  <SectionTitle icon={MonitorPlay} title="Live Activity" desc="Real-time kiosk events" />
+                  <SectionTitle icon={MonitorPlay} title="Live Activity" desc="What your screen is showing right now" />
                 </div>
                 <div className="flex-1 space-y-1">
                   <AnimatePresence initial={false}>
@@ -230,9 +230,9 @@ function WatermarkPreview({ biz, toast }) {
         )}
       </div>
       <div className="flex-1">
-        <p className="text-[12px] font-medium text-snow">Watermark position</p>
+        <p className="text-[12px] font-medium text-snow">Where the logo shows</p>
         <p className="mt-0.5 text-[11px] leading-snug text-mist">
-          {biz.logo ? 'Logo badge rendered bottom-right on every screen.' : 'Store name rendered bottom-right until a logo is added.'}
+          {biz.logo ? 'Your logo shows in the bottom-right corner of every screen.' : 'Your store name shows bottom-right until you add a logo.'}
         </p>
         <Button
           variant="soft"

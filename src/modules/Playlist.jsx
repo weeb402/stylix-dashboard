@@ -77,7 +77,7 @@ export default function Playlist() {
             <SectionTitle
               icon={SlidersHorizontal}
               title="Playlist Builder"
-              desc="Drag to reorder · every asset is live on the twin to the right"
+              desc="Drag to reorder · every change shows on the screen preview to the right"
               right={
                 <Button variant="soft" icon={Plus} size="sm" onClick={() => setAddOpen(true)}>
                   Add Assets
@@ -102,7 +102,7 @@ export default function Playlist() {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, x: -20 }}
                         transition={{ duration: 0.18 }}
-                        onDragEnd={() => toast('Playlist reordered · twin canvas re-synced', 'good')}
+                        onDragEnd={() => toast('New order is saved', 'good')}
                         className="group relative touch-none"
                       >
                         <div className="flex items-center gap-3 rounded-2xl border border-line bg-ink/60 p-2.5 transition-colors hover:border-brand/40 hairline">
@@ -153,7 +153,7 @@ export default function Playlist() {
                               tone="brand"
                               onClick={() => {
                                 setEditDur(s.id)
-                                toast('Override duration — seconds', 'brand')
+                                toast('Time per slide — seconds', 'brand')
                               }}
                             >
                               {s.dur}s
@@ -186,15 +186,15 @@ export default function Playlist() {
         <div className="col-span-12 lg:col-span-5">
           <div className="space-y-5">
             <Panel glow>
-              <SectionTitle icon={KioskTwinIcon} title="Live Inspector" desc="Your changes re-render on the virtual screen instantly" />
+              <SectionTitle icon={KioskTwinIcon} title="Live Preview" desc="See your changes take effect instantly" />
               <div className="mt-4 flex justify-center">
                 <KioskTwin className="w-[230px]" showStand={false} />
               </div>
             </Panel>
             <Panel>
-              <SectionTitle icon={SlidersHorizontal} title="Transition Inspector" desc="Master timeline settings" />
+              <SectionTitle icon={SlidersHorizontal} title="How Slides Change" desc="Set the time and the style between slides" />
               <div className="mt-4 space-y-5">
-                <Field label="Transition duration" value={`${tr.duration.toFixed(1)}s`}>
+                <Field label="Time between slides" value={`${tr.duration.toFixed(1)}s`}>
                   <Slider
                     min={0.5}
                     max={4}
@@ -209,27 +209,27 @@ export default function Playlist() {
                     <span>4.0s</span>
                   </div>
                 </Field>
-                <Field label="Animation style">
+                <Field label="Change style">
                   <Segmented options={anims} value={tr.style} onChange={(v) => actions.patch('transition', { style: v })} className="w-full [&>*]:flex-1" />
                 </Field>
-                <Field label="Image fit">
+                <Field label="Picture fit">
                   <Segmented options={fits} value={tr.fit} onChange={(v) => actions.patch('transition', { fit: v })} />
                 </Field>
                 <Divider />
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-[13px] font-medium text-snow">Auto-loop playlist</p>
-                    <p className="text-[11px] text-mist">Repeat infinitely while standee is live</p>
+                    <p className="text-[13px] font-medium text-snow">Keep repeating</p>
+                    <p className="text-[11px] text-mist">Replay again and again while the screen is on</p>
                   </div>
-                  <Switch size="md" on={tr.loop} onChange={(v) => { actions.patch('transition', { loop: v }); toast(`Auto-loop ${v ? 'enabled' : 'disabled'}`, 'brand') }} />
+                  <Switch size="md" on={tr.loop} onChange={(v) => { actions.patch('transition', { loop: v }); toast(`Auto-loop ${v ? 'switched on' : 'switched off'}`, 'brand') }} />
                 </div>
                 <Button
                   variant="soft"
                   block
                   icon={Repeat}
-                  onClick={() => toast('Timeline saved & pushed to 14 assets', 'good')}
+                  onClick={() => toast('Settings saved for all 14 slides', 'good')}
                 >
-                  Save broadcast timeline
+                  Save settings
                 </Button>
               </div>
             </Panel>
@@ -249,8 +249,8 @@ export default function Playlist() {
             <Button variant="ghost" onClick={() => setPreview(null)}>
               Close
             </Button>
-            <Button variant="primary" icon={Play} onClick={() => toast('Preview loop started on twin', 'good')}>
-              Play on twin
+            <Button variant="primary" icon={Play} onClick={() => toast('Preview is now playing', 'good')}>
+              Preview
             </Button>
           </div>
         }
@@ -277,7 +277,7 @@ export default function Playlist() {
       <Modal
         open={addOpen}
         onClose={() => setAddOpen(false)}
-        title="Add Assets"
+        title="Add Items"
         subtitle="Pull from Media Cloud or drop new media"
         width="max-w-2xl"
       >
@@ -285,7 +285,7 @@ export default function Playlist() {
           <Dropzone
             compact
             label="Drop new media into the playlist"
-            sub="MP4 · WebM · JPG · PNG — auto-optimised for the 9:16 standee"
+            sub="MP4 · WebM · JPG · PNG — we fit it to your screen automatically"
             formats={['MP4', 'WebM', 'PNG']}
             onFile={(f) => {
                 actions.addSlides([{ ...f, id: `s${++seq.current}`, dur: f.kind === 'video' ? 9 : 6, tag: 'New' }])

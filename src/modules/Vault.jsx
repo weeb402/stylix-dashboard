@@ -24,7 +24,7 @@ export default function Vault() {
   const items = GENERATIONS.filter((g) => tab === 'all' || g.cat === tab)
   const [qr, setQr] = useState(null)
 
-  const stats = app.vaultTab === 'all' ? '17 photos · 24h rolling window' : `${items.length} photos · ${CAT_LABEL[tab]}`
+  const stats = app.vaultTab === 'all' ? '17 photos · rolling 24 hours' : `${items.length} photos · ${CAT_LABEL[tab]}`
 
   return (
     <Section>
@@ -36,11 +36,11 @@ export default function Vault() {
             </div>
             <div>
               <p className="text-[14px] font-semibold text-snow">AI Try-On Vault</p>
-              <p className="text-[11px] text-mist">{stats} · auto-purge after the countdown completes</p>
+              <p className="text-[11px] text-mist">{stats} · kept for 24 hours, then removed</p>
             </div>
           </div>
           <div className="overflow-x-auto no-scrollbar">
-            <Segmented options={CATS} value={tab} onChange={(v) => { actions.set({ vaultTab: v }); toast(`${CAT_LABEL[v] || 'All'} vault filtered`, 'brand') }} />
+            <Segmented options={CATS} value={tab} onChange={(v) => { actions.set({ vaultTab: v }); toast(`${CAT_LABEL[v] || 'All'} photos`, 'brand') }} />
           </div>
         </div>
       </Panel>
@@ -114,7 +114,7 @@ function VaultCard({ g, onQR }) {
             Download
           </Button>
           <Button variant="soft" icon={QrCode} className="flex-1" size="sm" onClick={onQR}>
-            Send to Customer QR
+            Send to customer
           </Button>
         </div>
       </div>
@@ -128,7 +128,7 @@ function QRModal({ gen, onClose, toast }) {
     <Modal
       open={!!gen}
       onClose={onClose}
-      title="Send Look to Customer"
+      title="Send This Photo to a Customer"
       subtitle={gen?.title}
       width="max-w-sm"
       footer={
@@ -136,7 +136,7 @@ function QRModal({ gen, onClose, toast }) {
           <Button variant="ghost" className="flex-1" onClick={onClose}>
             Cancel
           </Button>
-          <Button variant="primary" icon={Send} className="flex-1" onClick={() => { toast('QR link sent to customer · +1 AI service credit', 'good'); onClose() }}>
+          <Button variant="primary" icon={Send} className="flex-1" onClick={() => { toast('Link sent to the customer', 'good'); onClose() }}>
             Send now
           </Button>
         </div>
@@ -149,7 +149,7 @@ function QRModal({ gen, onClose, toast }) {
           </div>
           <div className="w-full space-y-2">
             <div className="flex items-center justify-between rounded-xl border border-line bg-ink/50 px-3 py-2 text-[11px]">
-              <span className="text-mist">Share path</span>
+              <span className="text-mist">Link</span>
               <span className="font-mono text-[#a9baff]">stylix.live/x/{gen.id}</span>
             </div>
             <div className="flex items-center justify-between rounded-xl border border-line bg-ink/50 px-3 py-2 text-[11px]">

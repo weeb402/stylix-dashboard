@@ -123,7 +123,7 @@ export function Sidebar() {
             <p className="text-[17px] font-extrabold leading-tight tracking-[0.22em] text-snow">
               STYLIX
             </p>
-            <p className="text-[9px] font-semibold uppercase tracking-[0.26em] text-mist">Kiosk Command</p>
+            <p className="text-[9px] font-semibold uppercase tracking-[0.26em] text-mist">Store Console</p>
           </div>
         )}
       </div>

@@ -23,20 +23,20 @@ export default function Credits() {
   const quick = (n) => () => {
     const next = Math.min(TOTAL, Math.max(0, standee + n))
     setStandee(next)
-    toast(`Standee rebalanced · ${next} credits`, 'good')
+    toast(`Credits moved · screen now has ${next}`, 'good')
   }
 
   return (
     <Section>
       <Panel glow className="overflow-hidden">
         <div className="pointer-events-none absolute -right-20 -top-24 h-64 w-64 rounded-full bg-brand/15 blur-3xl" />
-        <SectionTitle icon={Coins} title="Hardware Quota Rebalancer" desc="Shift credits between the Master Cloud Wallet and the active Standee Kiosk" right={<Chip tone="brand" icon={Gauge}>Total pool · {TOTAL} credits</Chip>} />
+        <SectionTitle icon={Coins} title="Credit Allocator" desc="Move credits between your master pool and the store screen" right={<Chip tone="brand" icon={Gauge}>Total pool · {TOTAL} credits</Chip>} />
 
         {low && (
           <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} className="mt-4 flex items-center gap-3 rounded-xl border border-warn/40 bg-warn/10 px-4 py-3">
             <TriangleAlert className="h-4.5 w-4.5 shrink-0 text-warn" />
             <p className="text-[12px] text-snow">
-              Standee balance is critical — <span className="font-semibold text-warn">{standeeRenders} generations</span> left. Rebalance now to avoid downtime.
+              Your store screen is low on credits — about <span className="font-semibold text-warn">{standeeRenders} try-ons</span> left. Move credits now so it keeps working.
             </p>
           </motion.div>
         )}
@@ -47,7 +47,7 @@ export default function Credits() {
             <Pool
               side="master"
               icon={Cloud}
-              label="Master Cloud Wallet"
+              label="Master Pool"
               credits={master}
               cost={MASTER_COST}
               renders={masterRenders}
@@ -56,7 +56,7 @@ export default function Credits() {
             <div className="flex min-w-0 flex-1 flex-col gap-3 py-1">
               <div className="flex items-center justify-center gap-2 text-[11px] font-semibold uppercase tracking-wider text-mist">
                 <ArrowDownUp className="h-3.5 w-3.5" />
-                Drag to rebalance
+                Drag to move credits
               </div>
               <Slider
                 min={0}
@@ -64,12 +64,12 @@ export default function Credits() {
                 step={1}
                 value={standee}
                 onChange={setStandee}
-                format={(v) => `${v} standee`}
+                format={(v) => `${v} to screen`}
               />
               <div className="flex justify-between font-mono text-[10px] text-mist/70">
-                <span>0 standee</span>
-                <span>{Math.round((standee / TOTAL) * 100)}% to standee</span>
-                <span>{TOTAL} standee</span>
+                <span>0 to screen</span>
+                <span>{Math.round((standee / TOTAL) * 100)}% to screen</span>
+                <span>{TOTAL} to screen</span>
               </div>
               {/* Split bar */}
               <div className="flex h-2.5 overflow-hidden rounded-full ring-1 ring-line">
@@ -83,13 +83,13 @@ export default function Credits() {
                 </span>
               </div>
               <div className="mt-1.5 text-[10px] text-mist/70">
-                {low ? 'Low balance — every QR share now costs 1.0 credit.' : 'Recalculates live as you drag · 80% capture-rate assumption.'}
+                {low ? 'Low credits — every photo sent to a customer costs 1.0 credit.' : 'Recalculates as you drag · some people take the photo and walk away.'}
               </div>
             </div>
             <Pool
               side="standee"
               icon={Wallet}
-              label="Standee Kiosk"
+              label="Store Screen"
               credits={standee}
               cost={STANDEE_COST}
               renders={standeeRenders}
@@ -102,27 +102,27 @@ export default function Credits() {
 
         {/* Calculations */}
         <div className="grid gap-4 sm:grid-cols-3">
-          <Calc title="Master pool renders" value={masterRenders} sub={`at ${MASTER_COST} credit / generation`} tone="[#a9baff]" />
-          <Calc title="Standee renders left" value={standeeRenders} sub={`at ${STANDEE_COST} credit / generation`} tone={low ? 'warn' : 'good'} />
-          <Calc title="Est. sessions remaining" value={Math.floor(standeeRenders * 0.8)} sub="assuming 80% capture rate today" tone="good" />
+          <Calc title="Master pool uses" value={masterRenders} sub={`at ${MASTER_COST} credit / use`} tone="[#a9baff]" />
+          <Calc title="Try-ons left on screen" value={standeeRenders} sub={`at ${STANDEE_COST} credit / use`} tone={low ? 'warn' : 'good'} />
+          <Calc title="Est. happy sessions left" value={Math.floor(standeeRenders * 0.8)} sub="guessing 8 in 10 get shared" tone="good" />
         </div>
 
         {/* Quick actions */}
         <div className="mt-6 flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-line bg-ink/50 p-4">
           <div className="flex flex-wrap gap-2">
-            <Button variant="outline" size="sm" icon={RefreshCw} onClick={() => { setStandee(TOTAL / 2); toast('Balanced 50 / 50', 'good') }}>
-              Rebalance 50 / 50
+            <Button variant="outline" size="sm" icon={RefreshCw} onClick={() => { setStandee(TOTAL / 2); toast('Split evenly between both', 'good') }}>
+              Even split 50 / 50
             </Button>
             <Button variant="soft" size="sm" icon={Zap} onClick={quick(10)}>
-              +10 to standee
+              +10 to screen
             </Button>
             <Button variant="ghost" size="sm" icon={Wallet} onClick={quick(-10)}>
-              -10 to standee
+              -10 to screen
             </Button>
           </div>
           <div className="flex items-center gap-2.5">
-            <span className="text-[12px] text-mist">Auto-rebalance when low</span>
-            <Switch on={app.credits.auto} onChange={(v) => { actions.patch('credits', { auto: v }); toast(`Auto-rebalance ${v ? 'armed' : 'off'}`, 'brand') }} />
+            <span className="text-[12px] text-mist">Move credits automatically when low</span>
+            <Switch on={app.credits.auto} onChange={(v) => { actions.patch('credits', { auto: v }); toast(`Auto top-up ${v ? 'on' : 'off'}`, 'brand') }} />
           </div>
         </div>
 
@@ -154,9 +154,9 @@ function Pool({ side, icon: Icon, label, credits, cost, renders, accent }) {
       <p className="mt-1 font-mono text-[10px] text-mist/80">credits</p>
       <div className="mt-2 flex flex-col items-center gap-1">
         <span className={cx('rounded-full px-2 py-0.5 text-[10px] font-semibold', side === 'standee' ? 'bg-good/15 text-good' : 'bg-brand/15 text-[#a9baff]')}>
-          ≈ {renders} renders
+          ≈ {renders} uses
         </span>
-        <span className="text-[9px] text-mist/70">{cost} cr / gen</span>
+        <span className="text-[9px] text-mist/70">{cost} cr / use</span>
       </div>
     </motion.div>
   )

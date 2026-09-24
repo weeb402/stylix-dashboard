@@ -51,7 +51,7 @@ export function Topbar() {
           value={app.role}
           onChange={(r) => {
             actions.setRole(r)
-            toast(r === 'super' ? 'Super Admin session · full fleet access' : 'Store Owner session · dewanji smart home', 'brand')
+            toast(r === 'super' ? 'Super Admin view · all stores' : 'Store Owner view · dewanji', 'brand')
           }}
           options={[
             { value: 'owner', label: 'Owner', icon: UserRound },
@@ -136,7 +136,7 @@ export function Topbar() {
       <div
         role="button"
         tabIndex={0}
-        onClick={() => toast(app.role === 'super' ? 'Super Admin verified · fleet of 12 kiosks' : 'Owner session verified · dewanji smart home', 'brand')}
+        onClick={() => toast(app.role === 'super' ? 'Super Admin verified · 12 stores' : 'Owner verified · dewanji', 'brand')}
         className="flex cursor-pointer items-center gap-2.5 rounded-xl border border-line bg-raised py-1.5 pl-1.5 pr-3 transition-colors hover:border-brand/40"
       >
         <div className="grid h-7 w-7 place-items-center rounded-lg bg-gradient-to-br from-[#2e54f5] to-[#0d1a6b] text-white">

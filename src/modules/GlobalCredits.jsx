@@ -29,7 +29,7 @@ export default function GlobalCredits() {
 
   const charge = () => {
     const targets = POOL_DISTRIBUTORS.filter((p) => sel.has(p.id))
-    if (!targets.length) return toast('Pick kiosks to recharge first', 'warn')
+    if (!targets.length) return toast('Pick kiosks to top up first', 'warn')
     setCharging(true)
     setProgress(Object.fromEntries(targets.map((p) => [p.id, 0])))
     targets.forEach((p, i) => {
@@ -39,7 +39,7 @@ export default function GlobalCredits() {
         if (i === targets.length - 1) {
           setCharging(false)
           setSel(new Set())
-          toast(`${amount} credits recharged to ${targets.length} kiosks`, 'good')
+          toast(`${amount} credits added to ${targets.length} kiosks`, 'good')
         }
       }, 500 + i * 320)
     })
@@ -50,14 +50,14 @@ export default function GlobalCredits() {
       const n = new Set(low.map((p) => p.id))
       return n.size ? n : s
     })
-    if (low.length) toast(`Selected ${low.length} low-balance kiosks`, 'brand')
+    if (low.length) toast(`Picked ${low.length} kiosks that are low`, 'brand')
   }
 
   return (
     <Section>
       <Panel glow className="overflow-hidden">
         <div className="pointer-events-none absolute -right-16 -top-20 h-56 w-56 rounded-full bg-[#7c3aed]/15 blur-3xl" />
-        <SectionTitle icon={Coins} title="Global Credit Pool" desc="One distributor for every STYLIX kiosk across your network" right={<Chip tone="brand" icon={Landmark}>Pool · {pool} credits</Chip>} />
+        <SectionTitle icon={Coins} title="Credit Pool" desc="Add credits to any screen across your stores" right={<Chip tone="brand" icon={Landmark}>Pool · {pool} credits</Chip>} />
 
         {low.length > 0 && (
           <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} className="mt-4 flex items-center gap-3 rounded-xl border border-warn/40 bg-warn/10 px-4 py-3">
@@ -66,7 +66,7 @@ export default function GlobalCredits() {
               {low.length} kiosk{low.length > 1 ? 's' : ''} below 15 credits — <span className="font-semibold text-warn">{low.map((p) => p.id).join(', ')}</span> need a top-up.
             </p>
             <div className="ml-auto">
-              <Button variant="outline" size="sm" icon={Zap} onClick={selectLow}>Select low</Button>
+              <Button variant="outline" size="sm" icon={Zap} onClick={selectLow}>Pick low ones</Button>
             </div>
           </motion.div>
         )}
@@ -75,7 +75,7 @@ export default function GlobalCredits() {
           {/* Distributor */}
           <div className="lg:col-span-3">
             <div className="flex items-center justify-between">
-              <p className="text-[12px] font-semibold uppercase tracking-wider text-mist">Per-kiosk balance</p>
+              <p className="text-[12px] font-semibold uppercase tracking-wider text-mist">Balance per screen</p>
               <Chip icon={Wallet}>Reserve · {RESERVE}</Chip>
             </div>
             <div className="mt-3 space-y-2.5">
@@ -121,8 +121,8 @@ export default function GlobalCredits() {
           {/* Batch loader */}
           <div className="lg:col-span-2">
             <div className="rounded-2xl border border-line bg-ink/50 p-5">
-              <p className="text-[12px] font-semibold uppercase tracking-wider text-mist">Batch recharge</p>
-              <p className="mt-1 text-[11px] text-mist">Pick kiosks, set an amount, push credits straight from the pool.</p>
+              <p className="text-[12px] font-semibold uppercase tracking-wider text-mist">Pour credits in</p>
+              <p className="mt-1 text-[11px] text-mist">Pick kiosks, set an amount, and push credits from the pool.</p>
 
               <div className="mt-4 rounded-xl border border-line-strong bg-input p-4">
                 <div className="flex items-end justify-between">
@@ -138,7 +138,7 @@ export default function GlobalCredits() {
               </div>
 
               <Button block className="mt-4" icon={Zap} disabled={charging || sel.size === 0} onClick={charge}>
-                {charging ? 'Recharging…' : sel.size ? `Recharge ${sel.size} selected` : 'Recharge selected'}
+                {charging ? 'Adding…' : sel.size ? `Add to ${sel.size} selected` : 'Add credits'}
               </Button>
 
               {charging && (
@@ -165,7 +165,7 @@ export default function GlobalCredits() {
 
         <Divider className="my-6" />
         <div className="flex flex-wrap items-center justify-between gap-4">
-          <p className="text-[11px] text-mist/80">Every recharge settles in the fleet ledger in under a second · logged to super-admin audit trail.</p>
+          <p className="text-[11px] text-mist/80">Every top-up is recorded within a second · stored in the audit log.</p>
           <Chip tone="good" icon={Coins}>Reserve {RESERVE} · 12 kiosks covered</Chip>
         </div>
       </Panel>

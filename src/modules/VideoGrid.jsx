@@ -42,7 +42,7 @@ export default function VideoGrid() {
                 <p className="text-[13px] font-semibold text-snow">Grid Preview</p>
               </div>
               <Chip tone="brand" icon={LayoutGrid}>
-                {visible.length} active feeds
+                {visible.length} tiles showing
               </Chip>
             </div>
             <div className="flex flex-col items-center gap-4 p-6">
@@ -58,7 +58,7 @@ export default function VideoGrid() {
                     { value: 'split', label: 'Stacked' },
                   ]}
                   value={layout}
-                  onChange={(v) => { actions.set({ gridLayout: v }); toast(`Grid layout · ${v === 'stack' ? 'side-by-side' : 'stacked'}`, 'brand') }}
+                  onChange={(v) => { actions.set({ gridLayout: v }); toast(`Layout changed to ${v === 'stack' ? 'side-by-side' : 'stacked'}`, 'brand') }}
                   className="w-full [&>*]:flex-1"
                 />
                 <Button variant="primary" icon={Maximize2} onClick={() => setFull(true)}>
@@ -71,7 +71,7 @@ export default function VideoGrid() {
 
         <div className="col-span-12 space-y-5 lg:col-span-7">
           <Panel>
-            <SectionTitle icon={Layers2} title="Feed Sources" desc="Map sources, captions and audio for each tile" />
+            <SectionTitle icon={Layers2} title="Screen Tiles" desc="Choose what each tile shows, its words and its sound" />
             <div className="mt-4 space-y-4">
               {app.feeds.map((f, i) => (
                 <div key={f.id} className="rounded-2xl border border-line bg-ink/50 p-4">
@@ -85,18 +85,18 @@ export default function VideoGrid() {
                       <div className="flex items-center justify-between gap-3">
                         <div className="min-w-0 flex-1">
                           <p className="truncate text-[13px] font-semibold text-snow">{f.name}</p>
-                          <p className="text-[10px] text-mist">Tile {i + 1} · {f.visible ? 'broadcasting' : 'hidden'}</p>
+                          <p className="text-[10px] text-mist">Tile {i + 1} · {f.visible ? 'showing' : 'hidden'}</p>
                         </div>
                         <Chip tone={f.visible ? 'good' : 'default'} icon={f.visible ? Eye : EyeOff}>
                           {f.visible ? 'On' : 'Off'}
                         </Chip>
-                        <Switch size="sm" on={f.visible} onChange={(v) => { setFeed(f.id, { visible: v }); toast(`Feed ${i + 1} ${v ? 'shown' : 'hidden'} on standee`, v ? 'good' : 'warn') }} />
+                        <Switch size="sm" on={f.visible} onChange={(v) => { setFeed(f.id, { visible: v }); toast(`Tile ${i + 1} ${v ? 'showing' : 'hidden'} on screen`, v ? 'good' : 'warn') }} />
                       </div>
-                      <Select value={f.source} options={sourceOptions} onChange={(v) => { setFeed(f.id, { source: v }); toast('Feed source rebound', 'brand') }} />
+                      <Select value={f.source} options={sourceOptions} onChange={(v) => { setFeed(f.id, { source: v }); toast('Source changed for this tile', 'brand') }} />
                       <div className="grid gap-4 sm:grid-cols-2">
                         <div>
                           <p className="mb-1.5 text-[11px] font-medium uppercase tracking-wider text-mist">Caption overlay</p>
-                          <TextField size="sm" value={f.caption} onChange={(v) => setFeed(f.id, { caption: v })} onEnter={() => toast('Caption pushed to feed', 'good')} icon={Captions} />
+                          <TextField size="sm" value={f.caption} onChange={(v) => setFeed(f.id, { caption: v })} onEnter={() => toast('Caption saved', 'good')} icon={Captions} />
                         </div>
                         <div>
                           <div className="mb-1 flex items-center justify-between">
@@ -114,12 +114,12 @@ export default function VideoGrid() {
           </Panel>
 
           <Panel>
-            <SectionTitle icon={MonitorPlay} title="Playback Controls" desc="Broadcast session for Guest Standee" right={<Chip tone="good" icon={Play}>Session live · 11:04:12</Chip>} />
+            <SectionTitle icon={MonitorPlay} title="Playback Controls" desc="For your store screen" right={<Chip tone="good" icon={Play}>Running now</Chip>} />
             <div className="mt-4 grid gap-3 sm:grid-cols-3">
               {[
-                { label: 'Pause all', icon: Play, act: () => toast('All feeds paused', 'warn') },
-                { label: 'Swap feeds', icon: Layers2, act: () => toast('Feed priority swapped', 'good') },
-                { label: 'Re-sync A/V', icon: Volume2, act: () => toast('A/V buffers re-synced', 'brand') },
+                { label: 'Pause all', icon: Play, act: () => toast('All tiles paused', 'warn') },
+                { label: 'Swap tiles', icon: Layers2, act: () => toast('Tiles swapped', 'good') },
+                { label: 'Fix sound', icon: Volume2, act: () => toast('Sound and picture re-synced', 'brand') },
               ].map((b) => (
                 <Button key={b.label} variant="outline" icon={b.icon} onClick={b.act}>
                   {b.label}
@@ -130,7 +130,7 @@ export default function VideoGrid() {
         </div>
       </div>
 
-      <Modal open={full} onClose={() => setFull(false)} title="Fullscreen Kiosk Preview" subtitle="9:16 · what the standee renders right now" width="max-w-3xl">
+      <Modal open={full} onClose={() => setFull(false)} title="Fullscreen Preview" subtitle="What your screen shows right now" width="max-w-3xl">
         <div className="flex justify-center">
           <KioskTwin className="w-[360px]" />
         </div>
@@ -143,7 +143,7 @@ export default function VideoGrid() {
               <p className="mt-1 font-mono text-[10px] text-[#a9baff]">{f.volume}% vol</p>
             </div>
           ))}
-          {visible.length === 0 && <p className="col-span-3 text-[11px] text-mist">All feeds hidden — enable a tile above.</p>}
+          {visible.length === 0 && <p className="col-span-3 text-[11px] text-mist">Nothing is showing — turn on a tile on the left.</p>}
         </div>
       </Modal>
     </Section>

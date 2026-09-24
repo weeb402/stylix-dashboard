@@ -27,7 +27,7 @@ export default function Syndicate() {
     })
 
   const push = () => {
-    if (!targets.length) return toast('Choose at least one target kiosk', 'warn')
+    if (!targets.length) return toast('Pick at least one screen', 'warn')
     setPushing(true)
     setPushPct(Object.fromEntries(targets.map((k) => [k.id, 0])))
     targets.forEach((k, i) => {
@@ -39,7 +39,7 @@ export default function Syndicate() {
             { id: `sy${Date.now()}`, campaign: active.name, targets: targets.length, done: targets.length, status: 'completed', at: 'Just now', duration: `${Math.floor((targets.length * 3) / 60)}m ${(targets.length * 3) % 60}s` },
             ...h,
           ])
-          toast(`Pushed "${active.name}" to ${targets.length} kiosks`, 'good')
+          toast(`"${active.name}" is now on ${targets.length} screens`, 'good')
         }
       }, 400 + i * 220)
     })
@@ -51,12 +51,12 @@ export default function Syndicate() {
     <Section>
       <Panel glow className="overflow-hidden">
         <div className="pointer-events-none absolute -right-16 -top-20 h-56 w-56 rounded-full bg-emerald-500/10 blur-3xl" />
-        <SectionTitle icon={Network} title="Master Syndication" desc="One campaign, pushed live to every store in the fleet" right={<Chip tone="brand" icon={Share2}>CDN · edge sync 8s</Chip>} />
+        <SectionTitle icon={Network} title="Send to All Stores" desc="One campaign, shown everywhere — instantly" right={<Chip tone="brand" icon={Share2}>CDN · syncs every 8s</Chip>} />
 
         <div className="mt-6 grid gap-5 lg:grid-cols-5">
           {/* Campaign gallery */}
           <div className="lg:col-span-2">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-mist">Campaign pack</p>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-mist">Campaigns</p>
             <div className="mt-3 space-y-2.5">
               {CAMPAIGNS.map((c) => (
                 <div
@@ -89,7 +89,7 @@ export default function Syndicate() {
           <div className="lg:col-span-3">
             <div className="rounded-2xl border border-line bg-ink/50 p-5">
               <div className="flex items-center justify-between">
-                <p className="text-[12px] font-semibold uppercase tracking-wider text-mist">Target kiosks</p>
+                <p className="text-[12px] font-semibold uppercase tracking-wider text-mist">Pick screens</p>
                 <div className="flex items-center gap-2">
                   <Chip tone={allOn ? 'brand' : 'default'}>{selected.size}/{FLEET.length} selected</Chip>
                   <Button variant="ghost" size="sm" icon={Globe2} onClick={toggleAll}>
@@ -150,7 +150,7 @@ export default function Syndicate() {
               </div>
 
               <Button block className="mt-4" icon={Rocket} disabled={pushing || targets.length === 0} onClick={push}>
-                {pushing ? `Syncing ${targets.length} kiosks…` : targets.length ? `Push to ${targets.length} kiosks` : 'Push campaign'}
+                {pushing ? `Sending to ${targets.length} screens…` : targets.length ? `Send to ${targets.length} selected` : 'Send campaign'}
               </Button>
 
               {pushing && (
@@ -172,7 +172,7 @@ export default function Syndicate() {
         <Divider className="my-6" />
 
         {/* History */}
-        <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-mist">Syndication history</p>
+        <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-mist">What was sent</p>
         <div className="mt-3 space-y-2">
           {history.slice(0, 4).map((h) => (
             <div key={h.id} className="flex flex-wrap items-center gap-4 rounded-xl border border-line bg-ink/50 p-3.5">
